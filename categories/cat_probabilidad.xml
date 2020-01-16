@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Juan M Barrios Personal Site (Publicaciones sobre Probabilidad)</title><link>http://jmbarrios.github.io/</link><description></description><atom:link href="http://jmbarrios.github.io/categories/cat_probabilidad.xml" rel="self" type="application/rss+xml"></atom:link><language>es</language><copyright>Contents © 2020 &lt;a href="mailto:j.m.barrios@gmail.com"&gt;Juan M Barrios&lt;/a&gt; </copyright><lastBuildDate>Thu, 16 Jan 2020 16:09:02 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Generar un movimiento browniano usando puentes brownianos</title><link>http://jmbarrios.github.io/posts/generar-un-movimiento-browniano-usando-puentes-brownianos/</link><dc:creator>Juan M Barrios</dc:creator><description>&lt;div&gt;&lt;p&gt;&lt;img alt="Puente Browniano" src="http://jmbarrios.github.io/images/brownianbridge.png"&gt;&lt;/p&gt;
+&lt;p&gt;Supongamos que conocemos la posición de un movimiento browniano a los tiempos
+\(u\) y \(t\), \(W(u)=x\) y \(W(t)=y\), entonces la distribución del
+movimiento Browniano condicionado a este hecho se le conoce como puente
+browniano para los tiempos \(u &amp;lt; s &amp;lt; t\). Más aun, la distrbución de la
+variable \(W(s)\mid W(u)=x, W(t)=y\) es normal con parámetros&lt;/p&gt;
+&lt;p&gt;\[
+ \mu=\frac{(t-s)x+(s-u)y}{t-u}
+\]
+\[
+ \sigma^2=\frac{(s-u)(t-s)}{(t-u)}
+\]&lt;/p&gt;
+&lt;p&gt;Como el objetivo es simular trayectorias del movimiento en un segmento
+\([0, T]\) se puede hacer lo siguiente. Primero generar un valor para
+\(W(T)\) para después tomar el punto medio, \(T/2\), y ahí generar un nuevo
+valor a partir del hecho que en el tiempo 0 y \(T\) ya se conoce la posición
+del movimiento Browniano, es decir el nuevo valor sigue la distribución del
+puente Browniano. Después seguir este procedimiento en cada una de las dos
+partes que se forman, \([0,T/2]\) y \([T/2,T]\), y continuar así tantas
+veces como se desee.&lt;/p&gt;&lt;/div&gt;</description><category>movimiento browniano</category><category>puente browniano</category><category>simulacion</category><guid>http://jmbarrios.github.io/posts/generar-un-movimiento-browniano-usando-puentes-brownianos/</guid><pubDate>Fri, 03 Feb 2012 18:11:55 GMT</pubDate></item><item><title>Método de aceptación-rechazo</title><link>http://jmbarrios.github.io/posts/metodo-de-aceptacion-rechazo/</link><dc:creator>Juan M Barrios</dc:creator><description>&lt;div&gt;&lt;p&gt;El objetivo que se tiene es simular una variable aleatoria \(X\) con función de densidad \(f(x)\) para esto se hará uso de una variable auxiliar \(Y\) la cual tiene función de densidad \(g(y)\) y cumple que&lt;/p&gt;
+&lt;p&gt;\[
+  \frac{f(y)}{g(y)}\leq c\quad\mbox{para toda }y.
+\]&lt;/p&gt;
+&lt;p&gt;&lt;img alt="accept-reject" src="http://jmbarrios.github.io/images/accept-reject.png"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Algoritmo.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Paso 1.&lt;/strong&gt; Simula \(Y\) con la densidad \(g\) y simular un número aleatorio \(U\).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Paso 2.&lt;/strong&gt; Si \(U\leq f(Y)/cg(Y)\), haz \(X=Y\). de otra manera regresa al paso 1.&lt;/p&gt;
+&lt;p&gt;Una aplicación de este método es generar una variable \(X\) con distribución Beta(\(\alpha\),\(\beta\)) con \(\alpha\geq 1,\beta\geq 1\). Claramente en este caso la densidad de \(X\) está acotada superiormente por una cantidad \(M\).  Por lo que si hacemos \(Y\) una variable uniforme en el intervalo (0,1)&lt;/p&gt;
+&lt;p&gt;\[
+f_X(y)/f_Y(y)\leq M
+\]&lt;/p&gt;
+&lt;p&gt;y aceptaremos ese valor si un número aleatorio \(U\) es menor a \(f_X(Y)/M\).&lt;/p&gt;
+&lt;p&gt;Para implementar este método en R podemos usar el siguiente código.&lt;/p&gt;
+&lt;p&gt;&lt;script src="https://gist.github.com/jmbarrios/4eaff8a4e000af9a3deb.js?file=genBeta.r"&gt;&lt;/script&gt;
+        &lt;noscript&gt;&lt;pre&gt;404: Not Found
+&lt;/pre&gt;&lt;/noscript&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ejercicio.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Es bien sabido que si \(X\) es una variable Gamma(\(n\), \(\lambda\)) esta puede ser expresada como la suma de \(n\) variables exponenciales de parámetro \(\lambda\), además generar variables exponenciales se puede hacer de una manera sencilla ya que \(-log(U)/\lambda\) con uniforme(0,1) sigue esta distribución.&lt;/p&gt;
+&lt;p&gt;Ahora bien si \(X\) se distribuye Gamma(\(\alpha\), \(\beta\)) con \(\alpha\notin\mathbb{N}\) no resulta trivial generar. Una opción es generar un variable \(Y\) con distribución Gamma(\(\lfloor \alpha\rfloor\), \(\beta\)) y ver si es posible encontrar una constante \(M\) que cumpla con las condiciones para poder aplicar el método de aceptación-rechazo.&lt;/p&gt;&lt;/div&gt;</description><category>R</category><category>simulacion</category><guid>http://jmbarrios.github.io/posts/metodo-de-aceptacion-rechazo/</guid><pubDate>Mon, 28 Feb 2011 23:59:56 GMT</pubDate></item><item><title>El algoritmo Metropolis-Hastings</title><link>http://jmbarrios.github.io/posts/el-algoritmo-metropolis-hastings/</link><dc:creator>Juan M Barrios</dc:creator><description>&lt;div&gt;&lt;p&gt;Desde el punto de vista de simulación estocástica un problema muy común es el de simular un variable aleatoria con una distribución dada \(\pi(x)\) sobre \(\mathcal{S}\), si bien es cierto que hay varios métodos para hacer esto, resultan insuficientes.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Sample run Metropolis-Hastings" src="http://jmbarrios.github.io/images/mcmc.png"&gt;&lt;/p&gt;
+&lt;p&gt;En este sentido &lt;a href="http://link.aip.org/link/JCPSA6/v21/i6/p1087/s1"&gt;Nicolas Metropolis (1953)&lt;/a&gt; propuso un algoritmo el cual se basa en la construcción de una cadena de Markov , \({\bf X}=(X_n)\), ergódica la cual tenga a \(\pi(x)\) como distribución estacionaria. Bajo estas condiciones se tiene que&lt;/p&gt;
+&lt;p&gt;\[
+  \frac{N_x(n)}{n}\longrightarrow\pi(x)s=1\qquad\mbox{casi seguramente},
+\]&lt;/p&gt;
+&lt;p&gt;donde \(N_x(n)\) es el número de visitas a \(x\) hasta el tiempo \(n\). Por lo cual basta con generar la cadena de Markov  \({\bf X}\) y a partir de cierto momento los valores generados tendrán una distribución muy parecida a \(\pi(x)\).&lt;/p&gt;
+&lt;p&gt;Pero, ¿cómo construir estás cadena?, es aquí donde está el gran mérito de N. Metropolis. Su propuesta fue generar una cadena de la siguiente manera.&lt;/p&gt;
+&lt;p&gt;Supongamos que podemos generar una cadena de Markov con transición simétrica \({\bf \Theta}=(\theta(x,y))\). Definimos \({\bf X}={X_n, n\geq 0}\) como sigue:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;\(X_0=x^{(0)}\) para algún \(x^{(0)}\) en \(\mathcal{S}\).&lt;/li&gt;
+&lt;li&gt;Para \(n=1,2,\dots\). Si \(X_{n-1}=x_{n-1}\)&lt;/li&gt;
+&lt;li&gt;Generar \(y\) a partir de \(\theta(x_{n-1},\cdot)\),&lt;/li&gt;
+&lt;li&gt;calcular \(\alpha(x_{n-1},y)=\min{1,\frac{\pi(y)}{\pi(x_{n-1})}}\),&lt;/li&gt;
+&lt;li&gt;sea \(X_n\) la variable  que toma el valor \(y\) con probabilidad \(\alpha(x_{n-1},y)\) y \(x_{n-1}\) con probabilidad \(1-\alpha(x_{n-1},y)\).&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Por lo tanto \({\bf X}\) es una cadena de Markov reversible con espacio de estados \(\mathcal{S}\) y función de transición dada por&lt;/p&gt;
+&lt;p&gt;\[
+  P(x,y)=\begin{cases}
+    \theta(x,y)\alpha(x,y), x\neq y,\
+    \theta(x,x)+\sum_{y\neq x}\theta(x,y)[1-\alpha(x,y)],  x=y.
+  \end{cases}
+\]&lt;/p&gt;
+&lt;p&gt;Esta cadena tiene como distribución estacionaria a \(\pi(x)\) (Ejercicio) por lo cual basta generar un número &lt;strong&gt;suficiente&lt;/strong&gt; de iteraciones para poder tener números generados por tal distribución.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ejemplo:&lt;/strong&gt; Queremos generar una números aleatorios con distribución beta (2.7,6.3). La cadena de Markov que podemos generar va a ser \(U_1,U_2,\dots\) variables aleatorias con distribución uniforme en (0,1) y también vemos que el valor \(\alpha\) es fácil de calcular ya que este es&lt;/p&gt;
+&lt;p&gt;\[
+  \alpha(x_{n-1}, y)=\min\left(1,\frac{y^{1.7}(1-y)^{5.3}}{x_{n-1}^{1.7}(1-x_{n-1})^{5.3}}\right).
+\]&lt;/p&gt;
+&lt;p&gt;Nótese que \(\mathcal{S}\) es el intervalo [0,1], por lo que la cadena de Markov tiene espacio de estados no numerable. Si bien pareciera este un cambio muy pequeño fue necesario construir mucha teoría para formalizar la convergencia y existencia de este método.&lt;/p&gt;
+&lt;p&gt;Esto lo podemos implementar de manera fácil en R y además podemos visualizar la densidad empírica de nuestra simulación.&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="m"&gt;2.7&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="m"&gt;6.3&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="n"&gt;Nsim&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="m"&gt;5000&lt;/span&gt;
+&lt;span class="n"&gt;X&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;runif&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;# inicializar la cadena&lt;/span&gt;
+&lt;span class="nf"&gt;for &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;Nsim&lt;/span&gt;&lt;span class="p"&gt;){&lt;/span&gt;
+   &lt;span class="n"&gt;Y&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;runif&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+   &lt;span class="n"&gt;rho&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;dbeta&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Y&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nf"&gt;dbeta&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X[i&lt;/span&gt;&lt;span class="m"&gt;-1&lt;/span&gt;&lt;span class="n"&gt;]&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+   &lt;span class="n"&gt;X[i]&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="n"&gt;X[i&lt;/span&gt;&lt;span class="m"&gt;-1&lt;/span&gt;&lt;span class="n"&gt;]&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Y&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;X[i&lt;/span&gt;&lt;span class="m"&gt;-1&lt;/span&gt;&lt;span class="n"&gt;]&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;runif&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;rho&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+
+&lt;span class="nf"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ggplot2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="nf"&gt;qplot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;geom&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;'density'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;adjust&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;&lt;img alt="Densidad empirica para Beta(2.7,6.3)" src="http://jmbarrios.github.io/images/density.png"&gt;&lt;/p&gt;
+&lt;p&gt;Algunas referencias:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Casella, G and Robert, C. Introducing Monte Carlo Methods with R (Use R)&lt;/li&gt;
+&lt;li&gt;Hoel, P; Port, S and Stone, C. Introduction to Stochastic Processes&lt;/li&gt;
+&lt;li&gt;Nummelin, E. General Irreducible Markov Chains and Non-Negative Operators (Cambridge Tracts in Mathematics)&lt;/li&gt;
+&lt;/ul&gt;&lt;/div&gt;</description><category>cadenas de Markov</category><category>ggplot2</category><category>mcmc</category><category>metropolis-hastings</category><category>R</category><category>simulacion</category><guid>http://jmbarrios.github.io/posts/el-algoritmo-metropolis-hastings/</guid><pubDate>Sat, 09 Oct 2010 05:29:51 GMT</pubDate></item><item><title>Método Monte Carlo</title><link>http://jmbarrios.github.io/posts/metodo-monte-carlo/</link><dc:creator>Juan M Barrios</dc:creator><description>&lt;div&gt;&lt;p&gt;El Método Monte Carlo es un método numérico para simular sistemas físicos o
+matemáticos la virtud de esté método radica en un eficacia mayor a los usuales
+debido que hace uso de métodos aleatorios.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Rayleigh-Taylor Stability" src="http://jmbarrios.github.io/images/Rayleigh-Taylor_instability.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Uno de los principales usos de este método es la integración consiste en tratar
+de obtener el valor
+\[
+  \mu=\int f(x) dV
+\]
+para lo cual se generan variables aleatorias \(X_1,X_2,\dots\) independientes
+con densidad \(V\), por lo que la ecuación anterior es igual a
+\(\mathbb{E}f(X_i)=\mu\), y por lo tanto, por la ley de los Grandes Números,
+se sigue que
+\[
+  \frac{\sum_{i=1}^n f(X_i)-n\mu}{n}=\frac{\sum_{i=1}^n f(X_i)}{n}-\mu\underset{n\rightarrow\infty}{\longrightarrow} 0\qquad \mbox{c.s.}.
+\]&lt;/p&gt;
+&lt;p&gt;Entonces si quiero obtener el valor \(\mu\) basta con que promedie un número
+\(n\) suficientemente grande de variables; de aquí se desprende la primera
+pregunta y la más importante para entregar resultados: ¿qué tan grande debe
+ser $latex n$ para obtener un resultado bueno?.&lt;/p&gt;
+&lt;p&gt;Un primer acercamiento a esta pregunta es calcular la varianza de
+\(\tilde{I}&lt;em i="1"&gt;n=\frac{\sum&lt;/em&gt;^n f(X_i)}{n}\) de donde
+\[
+  \mathbb{V}\mbox{ar} \tilde{I}=\frac{\mathbb{V}\mbox{ar} f(X_i)}{n}=\frac{\sigma^2}{n},
+\]
+esto implica que lo único importante es hacer \(n\) suficientemente grande
+para que \(\frac{\sigma^2}{n}&amp;lt;\epsilon\), pero esto no siempre es suficiente
+para tener una buena aproximación ya que la varianza de una variable no siempre
+nos dice cosas sobre como es la variable aleatoria (vease casos en los que es
+inútil la 
+&lt;a href="http://en.wikipedia.org/wiki/Chebyshev%27s_inequality"&gt;desigualdad de Chebyshev&lt;/a&gt;),
+es aquí donde el otro gran teorema de la Probabilidad entra a resolver esta duda.&lt;/p&gt;
+&lt;p&gt;El Teorema del Límite Central nos dice que
+\[
+ \frac{\sum_{i=1}^n f(X_i)-n\mu}{\sqrt{n}\sigma}\underset{n\rightarrow\infty}{\longrightarrow} N(0,1)\qquad \mbox{en distribución},
+\]
+esto es
+\[
+  \mathbb{P}\left(\frac{X_1+X_2+\dots+X_n-n\mu}{\sqrt{n}\sigma}\leq x\right)\underset{n\rightarrow\infty}{\longrightarrow}\Phi(x)
+\]
+donde \(\Phi(x)\) es la distribución normal. Pero qué tiene que ver esto con
+el problema de decir cual es la \(n\) que debemos poner para obtener una buena 
+estimación.&lt;/p&gt;
+&lt;p&gt;Notemos que \(|\tilde{I}_n - \mu|\) es nuestro error en la aproximación por lo
+cual usando el Teorema del Límite Central se tiene que
+\[
+  \mathbb{P} \left(|\tilde{I}_n-\mu|&amp;lt;\frac{x\sigma}{\sqrt{n}}\right)\approx\mathbb{P}(|Z_n|&amp;lt;x)=2\Phi(x)-1.
+\]&lt;/p&gt;
+&lt;p&gt;Aplicando esto se tiene por ejemplo que si quiero que con un 95% de eficacia el
+error sea menor que 1/1000 tenemos
+\[
+  2\Phi(x)-1=0.95\qquad \Longrightarrow\qquad \Phi(x)=1.95/2=0.975
+\]
+de donde, usando un tabla para \(\Phi(x)\), se tiene que \(x=1.96\) y ahora
+\(n\) se tiene que elegir tal que \(1.96\,\sigma/\sqrt{n}\leq 1/1000\), y es
+así como se resuelve la pregunta tan molesta de que tan grande debe ser \(n\).
+Como se puede ver también en este método además del error de la aproximación
+se tiene un error de confiabilidad.&lt;/p&gt;
+&lt;p&gt;Queda un problema en el aire el cual ya no discutiré pero debe de tomarse en
+cuenta este es: ¿cómo calcular \(\sigma\)?, a veces será más fácil que calcular
+la esperanza pero la gran mayoría de las veces será igual o más complicado que
+calcular esta.&lt;/p&gt;&lt;/div&gt;</description><category>monte carlo</category><category>simulacion</category><guid>http://jmbarrios.github.io/posts/metodo-monte-carlo/</guid><pubDate>Wed, 07 Apr 2010 22:24:37 GMT</pubDate></item></channel></rss>

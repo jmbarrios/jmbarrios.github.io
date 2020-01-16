@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#
+" lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Método de aceptación-rechazo | Juan M Barrios Personal Site</title>
+<link href="../../assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/baguetteBox.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/rst.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/code.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/theme.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/ipython.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/jmbarrios_ipython.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.xml">
+<link rel="canonical" href="http://jmbarrios.github.io/posts/metodo-de-aceptacion-rechazo/">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><meta name="author" content="Juan M Barrios">
+<link rel="prev" href="../el-algoritmo-metropolis-hastings/" title="El algoritmo Metropolis-Hastings" type="text/html">
+<link rel="next" href="../generar-un-movimiento-browniano-usando-puentes-brownianos/" title="Generar un movimiento browniano usando puentes brownianos" type="text/html">
+<meta property="og:site_name" content="Juan M Barrios Personal Site">
+<meta property="og:title" content="Método de aceptación-rechazo">
+<meta property="og:url" content="http://jmbarrios.github.io/posts/metodo-de-aceptacion-rechazo/">
+<meta property="og:description" content="El objetivo que se tiene es simular una variable aleatoria \(X\) con función de densidad \(f(x)\) para esto se hará uso de una variable auxiliar \(Y\) la cual tiene función de densidad \(g(y)\) y cump">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2011-02-28T17:59:56-06:00">
+<meta property="article:tag" content="R">
+<meta property="article:tag" content="simulacion">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Ir al contenido principal</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-expand-md static-top mb-4
+navbar-dark bg-dark
+"><div class="container">
+<!-- This keeps the margins nice -->
+        <a class="navbar-brand" href="http://jmbarrios.github.io/">
+
+            <span id="blog-title">Juan M Barrios Personal Site</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="bs-navbar">
+            <ul class="navbar-nav mr-auto">
+<li class="nav-item">
+<a href="../../archive.html" class="nav-link">Archivo</a>
+                </li>
+<li class="nav-item">
+<a href="../../categories/" class="nav-link">Etiquetas</a>
+                </li>
+<li class="nav-item">
+<a href="../../rss.xml" class="nav-link">RSS</a>
+
+                
+            </li>
+</ul>
+<ul class="navbar-nav navbar-right">
+<li class="nav-item">
+    <a href="index.md" id="sourcelink" class="nav-link">Código fuente</a>
+    </li>
+
+
+                
+            </ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        
+        
+        
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Método de aceptación-rechazo</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    Juan M Barrios
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2011-02-28T17:59:56-06:00" itemprop="datePublished" title="2011-02-28 17:59">2011-02-28 17:59</time></a>
+            </p>
+            
+        <p class="sourceline"><a href="index.md" class="sourcelink">Código fuente</a></p>
+
+        </div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div>
+<p>El objetivo que se tiene es simular una variable aleatoria \(X\) con función de densidad \(f(x)\) para esto se hará uso de una variable auxiliar \(Y\) la cual tiene función de densidad \(g(y)\) y cumple que</p>
+<p>\[
+  \frac{f(y)}{g(y)}\leq c\quad\mbox{para toda }y.
+\]</p>
+<p><img alt="accept-reject" src="../../images/accept-reject.png"></p>
+<p><strong>Algoritmo.</strong></p>
+<p><strong>Paso 1.</strong> Simula \(Y\) con la densidad \(g\) y simular un número aleatorio \(U\).</p>
+<p><strong>Paso 2.</strong> Si \(U\leq f(Y)/cg(Y)\), haz \(X=Y\). de otra manera regresa al paso 1.</p>
+<p>Una aplicación de este método es generar una variable \(X\) con distribución Beta(\(\alpha\),\(\beta\)) con \(\alpha\geq 1,\beta\geq 1\). Claramente en este caso la densidad de \(X\) está acotada superiormente por una cantidad \(M\).  Por lo que si hacemos \(Y\) una variable uniforme en el intervalo (0,1)</p>
+<p>\[
+f_X(y)/f_Y(y)\leq M
+\]</p>
+<p>y aceptaremos ese valor si un número aleatorio \(U\) es menor a \(f_X(Y)/M\).</p>
+<p>Para implementar este método en R podemos usar el siguiente código.</p>
+<p><script src="https://gist.github.com/jmbarrios/4eaff8a4e000af9a3deb.js?file=genBeta.r"></script><noscript><pre>404: Not Found
+</pre></noscript></p>
+<p><strong>Ejercicio.</strong></p>
+<p>Es bien sabido que si \(X\) es una variable Gamma(\(n\), \(\lambda\)) esta puede ser expresada como la suma de \(n\) variables exponenciales de parámetro \(\lambda\), además generar variables exponenciales se puede hacer de una manera sencilla ya que \(-log(U)/\lambda\) con uniforme(0,1) sigue esta distribución.</p>
+<p>Ahora bien si \(X\) se distribuye Gamma(\(\alpha\), \(\beta\)) con \(\alpha\notin\mathbb{N}\) no resulta trivial generar. Una opción es generar un variable \(Y\) con distribución Gamma(\(\lfloor \alpha\rfloor\), \(\beta\)) y ver si es posible encontrar una constante \(M\) que cumpla con las condiciones para poder aplicar el método de aceptación-rechazo.</p>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/r/" rel="tag">R</a></li>
+            <li><a class="tag p-category" href="../../categories/simulacion/" rel="tag">simulacion</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../el-algoritmo-metropolis-hastings/" rel="prev" title="El algoritmo Metropolis-Hastings">Publicación anterior</a>
+            </li>
+            <li class="next">
+                <a href="../generar-un-movimiento-browniano-usando-puentes-brownianos/" rel="next" title="Generar un movimiento browniano usando puentes brownianos">Siguiente publicación</a>
+            </li>
+        </ul></nav></aside><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML" integrity="sha384-3lJUsx1TJHt7BA4udB5KPnDrlkO8T6J6v/op7ui0BbCjvZ9WqV4Xm6DTP6kQ/iBH" crossorigin="anonymous"></script><script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$latex ','$'], ['\\(','\\)']]}});
+        </script></article><!--End of body content--><footer id="footer">
+            Contents © 2020         <a href="mailto:j.m.barrios@gmail.com">Juan M Barrios</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+            
+        </footer>
+</div>
+</div>
+
+
+            <script src="../../assets/js/jquery.min.js"></script><script src="../../assets/js/popper.min.js"></script><script src="../../assets/js/bootstrap.min.js"></script><script src="../../assets/js/baguetteBox.min.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+    </script>
+</body>
+</html>

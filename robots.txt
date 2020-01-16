@@ -1,0 +1,4 @@
+Sitemap: http://jmbarrios.github.io/sitemapindex.xml
+
+User-Agent: *
+Host: jmbarrios.github.io

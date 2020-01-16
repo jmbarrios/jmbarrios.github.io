@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#
+" lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Método Monte Carlo | Juan M Barrios Personal Site</title>
+<link href="../../assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/baguetteBox.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/rst.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/code.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/theme.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/ipython.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/jmbarrios_ipython.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.xml">
+<link rel="canonical" href="http://jmbarrios.github.io/posts/metodo-monte-carlo/">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><meta name="author" content="Juan M Barrios">
+<link rel="next" href="../ggplot-y-funciones-de-distribucion/" title="ggplot y funciones de distribución" type="text/html">
+<meta property="og:site_name" content="Juan M Barrios Personal Site">
+<meta property="og:title" content="Método Monte Carlo">
+<meta property="og:url" content="http://jmbarrios.github.io/posts/metodo-monte-carlo/">
+<meta property="og:description" content="El Método Monte Carlo es un método numérico para simular sistemas físicos o
+matemáticos la virtud de esté método radica en un eficacia mayor a los usuales
+debido que hace uso de métodos aleatorios.
+
+U">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2010-04-07T16:24:37-06:00">
+<meta property="article:tag" content="monte carlo">
+<meta property="article:tag" content="simulacion">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Ir al contenido principal</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-expand-md static-top mb-4
+navbar-dark bg-dark
+"><div class="container">
+<!-- This keeps the margins nice -->
+        <a class="navbar-brand" href="http://jmbarrios.github.io/">
+
+            <span id="blog-title">Juan M Barrios Personal Site</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="bs-navbar">
+            <ul class="navbar-nav mr-auto">
+<li class="nav-item">
+<a href="../../archive.html" class="nav-link">Archivo</a>
+                </li>
+<li class="nav-item">
+<a href="../../categories/" class="nav-link">Etiquetas</a>
+                </li>
+<li class="nav-item">
+<a href="../../rss.xml" class="nav-link">RSS</a>
+
+                
+            </li>
+</ul>
+<ul class="navbar-nav navbar-right">
+<li class="nav-item">
+    <a href="index.md" id="sourcelink" class="nav-link">Código fuente</a>
+    </li>
+
+
+                
+            </ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        
+        
+        
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Método Monte Carlo</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    Juan M Barrios
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2010-04-07T16:24:37-06:00" itemprop="datePublished" title="2010-04-07 16:24">2010-04-07 16:24</time></a>
+            </p>
+            
+        <p class="sourceline"><a href="index.md" class="sourcelink">Código fuente</a></p>
+
+        </div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div>
+<p>El Método Monte Carlo es un método numérico para simular sistemas físicos o
+matemáticos la virtud de esté método radica en un eficacia mayor a los usuales
+debido que hace uso de métodos aleatorios.</p>
+<p><img alt="Rayleigh-Taylor Stability" src="../../images/Rayleigh-Taylor_instability.jpg"></p>
+<p>Uno de los principales usos de este método es la integración consiste en tratar
+de obtener el valor
+\[
+  \mu=\int f(x) dV
+\]
+para lo cual se generan variables aleatorias \(X_1,X_2,\dots\) independientes
+con densidad \(V\), por lo que la ecuación anterior es igual a
+\(\mathbb{E}f(X_i)=\mu\), y por lo tanto, por la ley de los Grandes Números,
+se sigue que
+\[
+  \frac{\sum_{i=1}^n f(X_i)-n\mu}{n}=\frac{\sum_{i=1}^n f(X_i)}{n}-\mu\underset{n\rightarrow\infty}{\longrightarrow} 0\qquad \mbox{c.s.}.
+\]</p>
+<p>Entonces si quiero obtener el valor \(\mu\) basta con que promedie un número
+\(n\) suficientemente grande de variables; de aquí se desprende la primera
+pregunta y la más importante para entregar resultados: ¿qué tan grande debe
+ser $latex n$ para obtener un resultado bueno?.</p>
+<p>Un primer acercamiento a esta pregunta es calcular la varianza de
+\(\tilde{I}<em i="1">n=\frac{\sum</em>^n f(X_i)}{n}\) de donde
+\[
+  \mathbb{V}\mbox{ar} \tilde{I}=\frac{\mathbb{V}\mbox{ar} f(X_i)}{n}=\frac{\sigma^2}{n},
+\]
+esto implica que lo único importante es hacer \(n\) suficientemente grande
+para que \(\frac{\sigma^2}{n}&lt;\epsilon\), pero esto no siempre es suficiente
+para tener una buena aproximación ya que la varianza de una variable no siempre
+nos dice cosas sobre como es la variable aleatoria (vease casos en los que es
+inútil la 
+<a href="http://en.wikipedia.org/wiki/Chebyshev%27s_inequality">desigualdad de Chebyshev</a>),
+es aquí donde el otro gran teorema de la Probabilidad entra a resolver esta duda.</p>
+<p>El Teorema del Límite Central nos dice que
+\[
+ \frac{\sum_{i=1}^n f(X_i)-n\mu}{\sqrt{n}\sigma}\underset{n\rightarrow\infty}{\longrightarrow} N(0,1)\qquad \mbox{en distribución},
+\]
+esto es
+\[
+  \mathbb{P}\left(\frac{X_1+X_2+\dots+X_n-n\mu}{\sqrt{n}\sigma}\leq x\right)\underset{n\rightarrow\infty}{\longrightarrow}\Phi(x)
+\]
+donde \(\Phi(x)\) es la distribución normal. Pero qué tiene que ver esto con
+el problema de decir cual es la \(n\) que debemos poner para obtener una buena 
+estimación.</p>
+<p>Notemos que \(|\tilde{I}_n - \mu|\) es nuestro error en la aproximación por lo
+cual usando el Teorema del Límite Central se tiene que
+\[
+  \mathbb{P} \left(|\tilde{I}_n-\mu|&lt;\frac{x\sigma}{\sqrt{n}}\right)\approx\mathbb{P}(|Z_n|&lt;x)=2\Phi(x)-1.
+\]</p>
+<p>Aplicando esto se tiene por ejemplo que si quiero que con un 95% de eficacia el
+error sea menor que 1/1000 tenemos
+\[
+  2\Phi(x)-1=0.95\qquad \Longrightarrow\qquad \Phi(x)=1.95/2=0.975
+\]
+de donde, usando un tabla para \(\Phi(x)\), se tiene que \(x=1.96\) y ahora
+\(n\) se tiene que elegir tal que \(1.96\,\sigma/\sqrt{n}\leq 1/1000\), y es
+así como se resuelve la pregunta tan molesta de que tan grande debe ser \(n\).
+Como se puede ver también en este método además del error de la aproximación
+se tiene un error de confiabilidad.</p>
+<p>Queda un problema en el aire el cual ya no discutiré pero debe de tomarse en
+cuenta este es: ¿cómo calcular \(\sigma\)?, a veces será más fácil que calcular
+la esperanza pero la gran mayoría de las veces será igual o más complicado que
+calcular esta.</p>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/monte-carlo/" rel="tag">monte carlo</a></li>
+            <li><a class="tag p-category" href="../../categories/simulacion/" rel="tag">simulacion</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="next">
+                <a href="../ggplot-y-funciones-de-distribucion/" rel="next" title="ggplot y funciones de distribución">Siguiente publicación</a>
+            </li>
+        </ul></nav></aside><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML" integrity="sha384-3lJUsx1TJHt7BA4udB5KPnDrlkO8T6J6v/op7ui0BbCjvZ9WqV4Xm6DTP6kQ/iBH" crossorigin="anonymous"></script><script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$latex ','$'], ['\\(','\\)']]}});
+        </script></article><!--End of body content--><footer id="footer">
+            Contents © 2020         <a href="mailto:j.m.barrios@gmail.com">Juan M Barrios</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+            
+        </footer>
+</div>
+</div>
+
+
+            <script src="../../assets/js/jquery.min.js"></script><script src="../../assets/js/popper.min.js"></script><script src="../../assets/js/bootstrap.min.js"></script><script src="../../assets/js/baguetteBox.min.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+    </script>
+</body>
+</html>

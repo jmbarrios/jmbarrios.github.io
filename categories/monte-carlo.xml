@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Juan M Barrios Personal Site (Publicaciones sobre monte carlo)</title><link>http://jmbarrios.github.io/</link><description></description><atom:link href="http://jmbarrios.github.io/categories/monte-carlo.xml" rel="self" type="application/rss+xml"></atom:link><language>es</language><copyright>Contents © 2020 &lt;a href="mailto:j.m.barrios@gmail.com"&gt;Juan M Barrios&lt;/a&gt; </copyright><lastBuildDate>Thu, 16 Jan 2020 16:09:02 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Método Monte Carlo</title><link>http://jmbarrios.github.io/posts/metodo-monte-carlo/</link><dc:creator>Juan M Barrios</dc:creator><description>&lt;div&gt;&lt;p&gt;El Método Monte Carlo es un método numérico para simular sistemas físicos o
+matemáticos la virtud de esté método radica en un eficacia mayor a los usuales
+debido que hace uso de métodos aleatorios.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Rayleigh-Taylor Stability" src="http://jmbarrios.github.io/images/Rayleigh-Taylor_instability.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;Uno de los principales usos de este método es la integración consiste en tratar
+de obtener el valor
+\[
+  \mu=\int f(x) dV
+\]
+para lo cual se generan variables aleatorias \(X_1,X_2,\dots\) independientes
+con densidad \(V\), por lo que la ecuación anterior es igual a
+\(\mathbb{E}f(X_i)=\mu\), y por lo tanto, por la ley de los Grandes Números,
+se sigue que
+\[
+  \frac{\sum_{i=1}^n f(X_i)-n\mu}{n}=\frac{\sum_{i=1}^n f(X_i)}{n}-\mu\underset{n\rightarrow\infty}{\longrightarrow} 0\qquad \mbox{c.s.}.
+\]&lt;/p&gt;
+&lt;p&gt;Entonces si quiero obtener el valor \(\mu\) basta con que promedie un número
+\(n\) suficientemente grande de variables; de aquí se desprende la primera
+pregunta y la más importante para entregar resultados: ¿qué tan grande debe
+ser $latex n$ para obtener un resultado bueno?.&lt;/p&gt;
+&lt;p&gt;Un primer acercamiento a esta pregunta es calcular la varianza de
+\(\tilde{I}&lt;em i="1"&gt;n=\frac{\sum&lt;/em&gt;^n f(X_i)}{n}\) de donde
+\[
+  \mathbb{V}\mbox{ar} \tilde{I}=\frac{\mathbb{V}\mbox{ar} f(X_i)}{n}=\frac{\sigma^2}{n},
+\]
+esto implica que lo único importante es hacer \(n\) suficientemente grande
+para que \(\frac{\sigma^2}{n}&amp;lt;\epsilon\), pero esto no siempre es suficiente
+para tener una buena aproximación ya que la varianza de una variable no siempre
+nos dice cosas sobre como es la variable aleatoria (vease casos en los que es
+inútil la 
+&lt;a href="http://en.wikipedia.org/wiki/Chebyshev%27s_inequality"&gt;desigualdad de Chebyshev&lt;/a&gt;),
+es aquí donde el otro gran teorema de la Probabilidad entra a resolver esta duda.&lt;/p&gt;
+&lt;p&gt;El Teorema del Límite Central nos dice que
+\[
+ \frac{\sum_{i=1}^n f(X_i)-n\mu}{\sqrt{n}\sigma}\underset{n\rightarrow\infty}{\longrightarrow} N(0,1)\qquad \mbox{en distribución},
+\]
+esto es
+\[
+  \mathbb{P}\left(\frac{X_1+X_2+\dots+X_n-n\mu}{\sqrt{n}\sigma}\leq x\right)\underset{n\rightarrow\infty}{\longrightarrow}\Phi(x)
+\]
+donde \(\Phi(x)\) es la distribución normal. Pero qué tiene que ver esto con
+el problema de decir cual es la \(n\) que debemos poner para obtener una buena 
+estimación.&lt;/p&gt;
+&lt;p&gt;Notemos que \(|\tilde{I}_n - \mu|\) es nuestro error en la aproximación por lo
+cual usando el Teorema del Límite Central se tiene que
+\[
+  \mathbb{P} \left(|\tilde{I}_n-\mu|&amp;lt;\frac{x\sigma}{\sqrt{n}}\right)\approx\mathbb{P}(|Z_n|&amp;lt;x)=2\Phi(x)-1.
+\]&lt;/p&gt;
+&lt;p&gt;Aplicando esto se tiene por ejemplo que si quiero que con un 95% de eficacia el
+error sea menor que 1/1000 tenemos
+\[
+  2\Phi(x)-1=0.95\qquad \Longrightarrow\qquad \Phi(x)=1.95/2=0.975
+\]
+de donde, usando un tabla para \(\Phi(x)\), se tiene que \(x=1.96\) y ahora
+\(n\) se tiene que elegir tal que \(1.96\,\sigma/\sqrt{n}\leq 1/1000\), y es
+así como se resuelve la pregunta tan molesta de que tan grande debe ser \(n\).
+Como se puede ver también en este método además del error de la aproximación
+se tiene un error de confiabilidad.&lt;/p&gt;
+&lt;p&gt;Queda un problema en el aire el cual ya no discutiré pero debe de tomarse en
+cuenta este es: ¿cómo calcular \(\sigma\)?, a veces será más fácil que calcular
+la esperanza pero la gran mayoría de las veces será igual o más complicado que
+calcular esta.&lt;/p&gt;&lt;/div&gt;</description><category>monte carlo</category><category>simulacion</category><guid>http://jmbarrios.github.io/posts/metodo-monte-carlo/</guid><pubDate>Wed, 07 Apr 2010 22:24:37 GMT</pubDate></item></channel></rss>

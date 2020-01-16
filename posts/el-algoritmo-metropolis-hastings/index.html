@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#
+" lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El algoritmo Metropolis-Hastings | Juan M Barrios Personal Site</title>
+<link href="../../assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/baguetteBox.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/rst.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/code.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/theme.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/ipython.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/jmbarrios_ipython.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="../../rss.xml">
+<link rel="canonical" href="http://jmbarrios.github.io/posts/el-algoritmo-metropolis-hastings/">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><meta name="author" content="Juan M Barrios">
+<link rel="prev" href="../ggplot-y-funciones-de-distribucion/" title="ggplot y funciones de distribución" type="text/html">
+<link rel="next" href="../metodo-de-aceptacion-rechazo/" title="Método de aceptación-rechazo" type="text/html">
+<meta property="og:site_name" content="Juan M Barrios Personal Site">
+<meta property="og:title" content="El algoritmo Metropolis-Hastings">
+<meta property="og:url" content="http://jmbarrios.github.io/posts/el-algoritmo-metropolis-hastings/">
+<meta property="og:description" content="Desde el punto de vista de simulación estocástica un problema muy común es el de simular un variable aleatoria con una distribución dada \(\pi(x)\) sobre \(\mathcal{S}\), si bien es cierto que hay var">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2010-10-08T23:29:51-06:00">
+<meta property="article:tag" content="cadenas de Markov">
+<meta property="article:tag" content="ggplot2">
+<meta property="article:tag" content="mcmc">
+<meta property="article:tag" content="metropolis-hastings">
+<meta property="article:tag" content="R">
+<meta property="article:tag" content="simulacion">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Ir al contenido principal</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-expand-md static-top mb-4
+navbar-dark bg-dark
+"><div class="container">
+<!-- This keeps the margins nice -->
+        <a class="navbar-brand" href="http://jmbarrios.github.io/">
+
+            <span id="blog-title">Juan M Barrios Personal Site</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="bs-navbar">
+            <ul class="navbar-nav mr-auto">
+<li class="nav-item">
+<a href="../../archive.html" class="nav-link">Archivo</a>
+                </li>
+<li class="nav-item">
+<a href="../../categories/" class="nav-link">Etiquetas</a>
+                </li>
+<li class="nav-item">
+<a href="../../rss.xml" class="nav-link">RSS</a>
+
+                
+            </li>
+</ul>
+<ul class="navbar-nav navbar-right">
+<li class="nav-item">
+    <a href="index.md" id="sourcelink" class="nav-link">Código fuente</a>
+    </li>
+
+
+                
+            </ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        
+        
+        
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">El algoritmo Metropolis-Hastings</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    Juan M Barrios
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2010-10-08T23:29:51-06:00" itemprop="datePublished" title="2010-10-08 23:29">2010-10-08 23:29</time></a>
+            </p>
+            
+        <p class="sourceline"><a href="index.md" class="sourcelink">Código fuente</a></p>
+
+        </div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div>
+<p>Desde el punto de vista de simulación estocástica un problema muy común es el de simular un variable aleatoria con una distribución dada \(\pi(x)\) sobre \(\mathcal{S}\), si bien es cierto que hay varios métodos para hacer esto, resultan insuficientes.</p>
+<p><img alt="Sample run Metropolis-Hastings" src="../../images/mcmc.png"></p>
+<p>En este sentido <a href="http://link.aip.org/link/JCPSA6/v21/i6/p1087/s1">Nicolas Metropolis (1953)</a> propuso un algoritmo el cual se basa en la construcción de una cadena de Markov , \({\bf X}=(X_n)\), ergódica la cual tenga a \(\pi(x)\) como distribución estacionaria. Bajo estas condiciones se tiene que</p>
+<p>\[
+  \frac{N_x(n)}{n}\longrightarrow\pi(x)s=1\qquad\mbox{casi seguramente},
+\]</p>
+<p>donde \(N_x(n)\) es el número de visitas a \(x\) hasta el tiempo \(n\). Por lo cual basta con generar la cadena de Markov  \({\bf X}\) y a partir de cierto momento los valores generados tendrán una distribución muy parecida a \(\pi(x)\).</p>
+<p>Pero, ¿cómo construir estás cadena?, es aquí donde está el gran mérito de N. Metropolis. Su propuesta fue generar una cadena de la siguiente manera.</p>
+<p>Supongamos que podemos generar una cadena de Markov con transición simétrica \({\bf \Theta}=(\theta(x,y))\). Definimos \({\bf X}={X_n, n\geq 0}\) como sigue:</p>
+<ol>
+<li>\(X_0=x^{(0)}\) para algún \(x^{(0)}\) en \(\mathcal{S}\).</li>
+<li>Para \(n=1,2,\dots\). Si \(X_{n-1}=x_{n-1}\)</li>
+<li>Generar \(y\) a partir de \(\theta(x_{n-1},\cdot)\),</li>
+<li>calcular \(\alpha(x_{n-1},y)=\min{1,\frac{\pi(y)}{\pi(x_{n-1})}}\),</li>
+<li>sea \(X_n\) la variable  que toma el valor \(y\) con probabilidad \(\alpha(x_{n-1},y)\) y \(x_{n-1}\) con probabilidad \(1-\alpha(x_{n-1},y)\).</li>
+</ol>
+<p>Por lo tanto \({\bf X}\) es una cadena de Markov reversible con espacio de estados \(\mathcal{S}\) y función de transición dada por</p>
+<p>\[
+  P(x,y)=\begin{cases}
+    \theta(x,y)\alpha(x,y), x\neq y,\
+    \theta(x,x)+\sum_{y\neq x}\theta(x,y)[1-\alpha(x,y)],  x=y.
+  \end{cases}
+\]</p>
+<p>Esta cadena tiene como distribución estacionaria a \(\pi(x)\) (Ejercicio) por lo cual basta generar un número <strong>suficiente</strong> de iteraciones para poder tener números generados por tal distribución.</p>
+<p><strong>Ejemplo:</strong> Queremos generar una números aleatorios con distribución beta (2.7,6.3). La cadena de Markov que podemos generar va a ser \(U_1,U_2,\dots\) variables aleatorias con distribución uniforme en (0,1) y también vemos que el valor \(\alpha\) es fácil de calcular ya que este es</p>
+<p>\[
+  \alpha(x_{n-1}, y)=\min\left(1,\frac{y^{1.7}(1-y)^{5.3}}{x_{n-1}^{1.7}(1-x_{n-1})^{5.3}}\right).
+\]</p>
+<p>Nótese que \(\mathcal{S}\) es el intervalo [0,1], por lo que la cadena de Markov tiene espacio de estados no numerable. Si bien pareciera este un cambio muy pequeño fue necesario construir mucha teoría para formalizar la convergencia y existencia de este método.</p>
+<p>Esto lo podemos implementar de manera fácil en R y además podemos visualizar la densidad empírica de nuestra simulación.</p>
+<pre class="code literal-block"><span></span><span class="n">a</span> <span class="o">&lt;-</span> <span class="m">2.7</span><span class="p">;</span>
+<span class="n">b</span> <span class="o">&lt;-</span> <span class="m">6.3</span><span class="p">;</span>
+<span class="n">Nsim</span> <span class="o">&lt;-</span> <span class="m">5000</span>
+<span class="n">X</span> <span class="o">&lt;-</span> <span class="nf">runif</span><span class="p">(</span><span class="m">1</span><span class="p">)</span> <span class="c1"># inicializar la cadena</span>
+<span class="nf">for </span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="m">2</span><span class="o">:</span><span class="n">Nsim</span><span class="p">){</span>
+   <span class="n">Y</span> <span class="o">&lt;-</span> <span class="nf">runif</span><span class="p">(</span><span class="m">1</span><span class="p">)</span>
+   <span class="n">rho</span> <span class="o">&lt;-</span> <span class="nf">dbeta</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span><span class="o">/</span><span class="nf">dbeta</span><span class="p">(</span><span class="n">X[i</span><span class="m">-1</span><span class="n">]</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+   <span class="n">X[i]</span> <span class="o">&lt;-</span> <span class="n">X[i</span><span class="m">-1</span><span class="n">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">Y</span><span class="o">-</span><span class="n">X[i</span><span class="m">-1</span><span class="n">]</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="nf">runif</span><span class="p">(</span><span class="m">1</span><span class="p">)</span><span class="o">&lt;</span><span class="n">rho</span><span class="p">)</span>
+<span class="p">}</span>
+
+
+<span class="nf">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
+<span class="nf">qplot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">geom</span><span class="o">=</span><span class="s">'density'</span><span class="p">,</span> <span class="n">adjust</span><span class="o">=</span><span class="m">3</span><span class="p">)</span>
+</pre>
+
+
+<p><img alt="Densidad empirica para Beta(2.7,6.3)" src="../../images/density.png"></p>
+<p>Algunas referencias:</p>
+<ul>
+<li>Casella, G and Robert, C. Introducing Monte Carlo Methods with R (Use R)</li>
+<li>Hoel, P; Port, S and Stone, C. Introduction to Stochastic Processes</li>
+<li>Nummelin, E. General Irreducible Markov Chains and Non-Negative Operators (Cambridge Tracts in Mathematics)</li>
+</ul>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/cadenas-de-markov/" rel="tag">cadenas de Markov</a></li>
+            <li><a class="tag p-category" href="../../categories/ggplot2/" rel="tag">ggplot2</a></li>
+            <li><a class="tag p-category" href="../../categories/mcmc/" rel="tag">mcmc</a></li>
+            <li><a class="tag p-category" href="../../categories/metropolis-hastings/" rel="tag">metropolis-hastings</a></li>
+            <li><a class="tag p-category" href="../../categories/r/" rel="tag">R</a></li>
+            <li><a class="tag p-category" href="../../categories/simulacion/" rel="tag">simulacion</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../ggplot-y-funciones-de-distribucion/" rel="prev" title="ggplot y funciones de distribución">Publicación anterior</a>
+            </li>
+            <li class="next">
+                <a href="../metodo-de-aceptacion-rechazo/" rel="next" title="Método de aceptación-rechazo">Siguiente publicación</a>
+            </li>
+        </ul></nav></aside><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML" integrity="sha384-3lJUsx1TJHt7BA4udB5KPnDrlkO8T6J6v/op7ui0BbCjvZ9WqV4Xm6DTP6kQ/iBH" crossorigin="anonymous"></script><script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$latex ','$'], ['\\(','\\)']]}});
+        </script></article><!--End of body content--><footer id="footer">
+            Contents © 2020         <a href="mailto:j.m.barrios@gmail.com">Juan M Barrios</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+            
+        </footer>
+</div>
+</div>
+
+
+            <script src="../../assets/js/jquery.min.js"></script><script src="../../assets/js/popper.min.js"></script><script src="../../assets/js/bootstrap.min.js"></script><script src="../../assets/js/baguetteBox.min.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+    </script>
+</body>
+</html>

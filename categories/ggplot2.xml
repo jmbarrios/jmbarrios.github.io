@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Juan M Barrios Personal Site (Publicaciones sobre ggplot2)</title><link>http://jmbarrios.github.io/</link><description></description><atom:link href="http://jmbarrios.github.io/categories/ggplot2.xml" rel="self" type="application/rss+xml"></atom:link><language>es</language><copyright>Contents © 2020 &lt;a href="mailto:j.m.barrios@gmail.com"&gt;Juan M Barrios&lt;/a&gt; </copyright><lastBuildDate>Thu, 16 Jan 2020 16:09:02 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>El algoritmo Metropolis-Hastings</title><link>http://jmbarrios.github.io/posts/el-algoritmo-metropolis-hastings/</link><dc:creator>Juan M Barrios</dc:creator><description>&lt;div&gt;&lt;p&gt;Desde el punto de vista de simulación estocástica un problema muy común es el de simular un variable aleatoria con una distribución dada \(\pi(x)\) sobre \(\mathcal{S}\), si bien es cierto que hay varios métodos para hacer esto, resultan insuficientes.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Sample run Metropolis-Hastings" src="http://jmbarrios.github.io/images/mcmc.png"&gt;&lt;/p&gt;
+&lt;p&gt;En este sentido &lt;a href="http://link.aip.org/link/JCPSA6/v21/i6/p1087/s1"&gt;Nicolas Metropolis (1953)&lt;/a&gt; propuso un algoritmo el cual se basa en la construcción de una cadena de Markov , \({\bf X}=(X_n)\), ergódica la cual tenga a \(\pi(x)\) como distribución estacionaria. Bajo estas condiciones se tiene que&lt;/p&gt;
+&lt;p&gt;\[
+  \frac{N_x(n)}{n}\longrightarrow\pi(x)s=1\qquad\mbox{casi seguramente},
+\]&lt;/p&gt;
+&lt;p&gt;donde \(N_x(n)\) es el número de visitas a \(x\) hasta el tiempo \(n\). Por lo cual basta con generar la cadena de Markov  \({\bf X}\) y a partir de cierto momento los valores generados tendrán una distribución muy parecida a \(\pi(x)\).&lt;/p&gt;
+&lt;p&gt;Pero, ¿cómo construir estás cadena?, es aquí donde está el gran mérito de N. Metropolis. Su propuesta fue generar una cadena de la siguiente manera.&lt;/p&gt;
+&lt;p&gt;Supongamos que podemos generar una cadena de Markov con transición simétrica \({\bf \Theta}=(\theta(x,y))\). Definimos \({\bf X}={X_n, n\geq 0}\) como sigue:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;\(X_0=x^{(0)}\) para algún \(x^{(0)}\) en \(\mathcal{S}\).&lt;/li&gt;
+&lt;li&gt;Para \(n=1,2,\dots\). Si \(X_{n-1}=x_{n-1}\)&lt;/li&gt;
+&lt;li&gt;Generar \(y\) a partir de \(\theta(x_{n-1},\cdot)\),&lt;/li&gt;
+&lt;li&gt;calcular \(\alpha(x_{n-1},y)=\min{1,\frac{\pi(y)}{\pi(x_{n-1})}}\),&lt;/li&gt;
+&lt;li&gt;sea \(X_n\) la variable  que toma el valor \(y\) con probabilidad \(\alpha(x_{n-1},y)\) y \(x_{n-1}\) con probabilidad \(1-\alpha(x_{n-1},y)\).&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Por lo tanto \({\bf X}\) es una cadena de Markov reversible con espacio de estados \(\mathcal{S}\) y función de transición dada por&lt;/p&gt;
+&lt;p&gt;\[
+  P(x,y)=\begin{cases}
+    \theta(x,y)\alpha(x,y), x\neq y,\
+    \theta(x,x)+\sum_{y\neq x}\theta(x,y)[1-\alpha(x,y)],  x=y.
+  \end{cases}
+\]&lt;/p&gt;
+&lt;p&gt;Esta cadena tiene como distribución estacionaria a \(\pi(x)\) (Ejercicio) por lo cual basta generar un número &lt;strong&gt;suficiente&lt;/strong&gt; de iteraciones para poder tener números generados por tal distribución.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ejemplo:&lt;/strong&gt; Queremos generar una números aleatorios con distribución beta (2.7,6.3). La cadena de Markov que podemos generar va a ser \(U_1,U_2,\dots\) variables aleatorias con distribución uniforme en (0,1) y también vemos que el valor \(\alpha\) es fácil de calcular ya que este es&lt;/p&gt;
+&lt;p&gt;\[
+  \alpha(x_{n-1}, y)=\min\left(1,\frac{y^{1.7}(1-y)^{5.3}}{x_{n-1}^{1.7}(1-x_{n-1})^{5.3}}\right).
+\]&lt;/p&gt;
+&lt;p&gt;Nótese que \(\mathcal{S}\) es el intervalo [0,1], por lo que la cadena de Markov tiene espacio de estados no numerable. Si bien pareciera este un cambio muy pequeño fue necesario construir mucha teoría para formalizar la convergencia y existencia de este método.&lt;/p&gt;
+&lt;p&gt;Esto lo podemos implementar de manera fácil en R y además podemos visualizar la densidad empírica de nuestra simulación.&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="m"&gt;2.7&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="m"&gt;6.3&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="n"&gt;Nsim&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="m"&gt;5000&lt;/span&gt;
+&lt;span class="n"&gt;X&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;runif&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;# inicializar la cadena&lt;/span&gt;
+&lt;span class="nf"&gt;for &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;Nsim&lt;/span&gt;&lt;span class="p"&gt;){&lt;/span&gt;
+   &lt;span class="n"&gt;Y&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;runif&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+   &lt;span class="n"&gt;rho&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="nf"&gt;dbeta&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Y&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nf"&gt;dbeta&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X[i&lt;/span&gt;&lt;span class="m"&gt;-1&lt;/span&gt;&lt;span class="n"&gt;]&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+   &lt;span class="n"&gt;X[i]&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="n"&gt;X[i&lt;/span&gt;&lt;span class="m"&gt;-1&lt;/span&gt;&lt;span class="n"&gt;]&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Y&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;X[i&lt;/span&gt;&lt;span class="m"&gt;-1&lt;/span&gt;&lt;span class="n"&gt;]&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;runif&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;rho&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+
+&lt;span class="nf"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ggplot2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="nf"&gt;qplot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;geom&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;'density'&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;adjust&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;&lt;img alt="Densidad empirica para Beta(2.7,6.3)" src="http://jmbarrios.github.io/images/density.png"&gt;&lt;/p&gt;
+&lt;p&gt;Algunas referencias:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Casella, G and Robert, C. Introducing Monte Carlo Methods with R (Use R)&lt;/li&gt;
+&lt;li&gt;Hoel, P; Port, S and Stone, C. Introduction to Stochastic Processes&lt;/li&gt;
+&lt;li&gt;Nummelin, E. General Irreducible Markov Chains and Non-Negative Operators (Cambridge Tracts in Mathematics)&lt;/li&gt;
+&lt;/ul&gt;&lt;/div&gt;</description><category>cadenas de Markov</category><category>ggplot2</category><category>mcmc</category><category>metropolis-hastings</category><category>R</category><category>simulacion</category><guid>http://jmbarrios.github.io/posts/el-algoritmo-metropolis-hastings/</guid><pubDate>Sat, 09 Oct 2010 05:29:51 GMT</pubDate></item><item><title>ggplot y funciones de distribución</title><link>http://jmbarrios.github.io/posts/ggplot-y-funciones-de-distribucion/</link><dc:creator>Juan M Barrios</dc:creator><description>&lt;div&gt;&lt;p&gt;R además de ser un estupendo software estadístico es capaz de generar gráficos
+muy elegantes gracias al paquete ggPlot.&lt;/p&gt;
+&lt;p&gt;Consideremos cierta máquina la cual puede fallar algunos días a la semana. La
+información obtenida al monitorear su funcionamiento por un año es el siguiente.&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;p&gt;9 semanas no falló,&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;14 semanas falló un día,&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;13 semanas falló dos días,&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;9 semanas falló tres días,&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;4 semanas falló cuatro días,&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;2 semanas falló cinco días,&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;1 semana no funcionó ninguno de los seis días.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Lo primero que haremos es definir el muestreo que obtuvimos de ver el número
+de días a la semana que la máquina se encontraba descompuesta y la proporción
+que representa del total de semanas observadas.&lt;/p&gt;
+&lt;p&gt;&lt;script src="https://gist.github.com/jmbarrios/3512564.js"&gt;&lt;/script&gt;
+        &lt;noscript&gt;&lt;pre&gt;404: Not Found
+&lt;/pre&gt;&lt;/noscript&gt;&lt;/p&gt;
+&lt;p&gt;Habiendo definido la densidad correspondiente al número de fallas. Veamos
+como graficar la correpondiente densidad y su distribución.&lt;/p&gt;
+&lt;p&gt;&lt;script src="https://gist.github.com/jmbarrios/3512575.js"&gt;&lt;/script&gt;
+        &lt;noscript&gt;&lt;pre&gt;404: Not Found
+&lt;/pre&gt;&lt;/noscript&gt;&lt;/p&gt;
+&lt;img alt="/images/bargraph.png" src="http://jmbarrios.github.io/images/bargraph.png"&gt;
+&lt;p&gt;Ahora veamos el caso similar pero para una variable aleatoria con densidad
+continua. Para lo cual usaremos la función integrate para calcular las
+correspondientes integrales para calcular la distribución.&lt;/p&gt;
+&lt;p&gt;&lt;script src="https://gist.github.com/jmbarrios/3512608.js"&gt;&lt;/script&gt;
+        &lt;noscript&gt;&lt;pre&gt;404: Not Found
+&lt;/pre&gt;&lt;/noscript&gt;&lt;/p&gt;&lt;/div&gt;</description><category>ggplot2</category><category>R</category><guid>http://jmbarrios.github.io/posts/ggplot-y-funciones-de-distribucion/</guid><pubDate>Tue, 28 Sep 2010 04:03:31 GMT</pubDate></item></channel></rss>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Juan M Barrios Personal Site (Publicaciones sobre puente browniano)</title><link>http://jmbarrios.github.io/</link><description></description><atom:link href="http://jmbarrios.github.io/categories/puente-browniano.xml" rel="self" type="application/rss+xml"></atom:link><language>es</language><copyright>Contents © 2020 &lt;a href="mailto:j.m.barrios@gmail.com"&gt;Juan M Barrios&lt;/a&gt; </copyright><lastBuildDate>Thu, 16 Jan 2020 16:09:02 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Generar un movimiento browniano usando puentes brownianos</title><link>http://jmbarrios.github.io/posts/generar-un-movimiento-browniano-usando-puentes-brownianos/</link><dc:creator>Juan M Barrios</dc:creator><description>&lt;div&gt;&lt;p&gt;&lt;img alt="Puente Browniano" src="http://jmbarrios.github.io/images/brownianbridge.png"&gt;&lt;/p&gt;
+&lt;p&gt;Supongamos que conocemos la posición de un movimiento browniano a los tiempos
+\(u\) y \(t\), \(W(u)=x\) y \(W(t)=y\), entonces la distribución del
+movimiento Browniano condicionado a este hecho se le conoce como puente
+browniano para los tiempos \(u &amp;lt; s &amp;lt; t\). Más aun, la distrbución de la
+variable \(W(s)\mid W(u)=x, W(t)=y\) es normal con parámetros&lt;/p&gt;
+&lt;p&gt;\[
+ \mu=\frac{(t-s)x+(s-u)y}{t-u}
+\]
+\[
+ \sigma^2=\frac{(s-u)(t-s)}{(t-u)}
+\]&lt;/p&gt;
+&lt;p&gt;Como el objetivo es simular trayectorias del movimiento en un segmento
+\([0, T]\) se puede hacer lo siguiente. Primero generar un valor para
+\(W(T)\) para después tomar el punto medio, \(T/2\), y ahí generar un nuevo
+valor a partir del hecho que en el tiempo 0 y \(T\) ya se conoce la posición
+del movimiento Browniano, es decir el nuevo valor sigue la distribución del
+puente Browniano. Después seguir este procedimiento en cada una de las dos
+partes que se forman, \([0,T/2]\) y \([T/2,T]\), y continuar así tantas
+veces como se desee.&lt;/p&gt;&lt;/div&gt;</description><category>movimiento browniano</category><category>puente browniano</category><category>simulacion</category><guid>http://jmbarrios.github.io/posts/generar-un-movimiento-browniano-usando-puentes-brownianos/</guid><pubDate>Fri, 03 Feb 2012 18:11:55 GMT</pubDate></item></channel></rss>
