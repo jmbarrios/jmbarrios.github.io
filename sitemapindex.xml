@@ -15,11 +15,15 @@
  </sitemap>
  <sitemap>
   <loc>http://jmbarrios.github.io/categories/cat_r.xml</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-16T18:14:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://jmbarrios.github.io/categories/conabio.xml</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-16T18:14:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>http://jmbarrios.github.io/categories/geo.xml</loc>
+  <lastmod>2020-01-16T18:14:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://jmbarrios.github.io/categories/ggplot2.xml</loc>
@@ -47,7 +51,7 @@
  </sitemap>
  <sitemap>
   <loc>http://jmbarrios.github.io/categories/r.xml</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-16T18:14:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://jmbarrios.github.io/categories/simulacion.xml</loc>
@@ -55,7 +59,7 @@
  </sitemap>
  <sitemap>
   <loc>http://jmbarrios.github.io/categories/snib.xml</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-16T18:14:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://jmbarrios.github.io/galleries/rss.xml</loc>
@@ -63,10 +67,10 @@
  </sitemap>
  <sitemap>
   <loc>http://jmbarrios.github.io/rss.xml</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-16T18:14:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>http://jmbarrios.github.io/sitemap.xml</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-16T18:14:00Z</lastmod>
  </sitemap>
 </sitemapindex>
