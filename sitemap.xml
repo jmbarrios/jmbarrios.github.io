@@ -7,126 +7,150 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
   <loc>http://jmbarrios.github.io/</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/2010/</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/2011/</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/2012/</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/2018/</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
+ </url>
+ <url>
+  <loc>http://jmbarrios.github.io/about/</loc>
+  <lastmod>2020-01-19T05:30:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/archive.html</loc>
-  <lastmod>2020-01-16T18:14:00Z</lastmod>
+  <lastmod>2020-01-19T17:34:00Z</lastmod>
+ </url>
+ <url>
+  <loc>http://jmbarrios.github.io/blog/</loc>
+  <lastmod>2020-01-17T03:37:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/categories/</loc>
-  <lastmod>2020-01-16T18:14:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/categories/cadenas-de-markov/</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/categories/cat_probabilidad/</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/categories/cat_r/</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/categories/conabio/</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/categories/geo/</loc>
-  <lastmod>2020-01-16T18:14:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/categories/ggplot2/</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/categories/mcmc/</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/categories/metropolis-hastings/</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/categories/monte-carlo/</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/categories/movimiento-browniano/</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/categories/puente-browniano/</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/categories/r/</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/categories/simulacion/</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/categories/snib/</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/galleries/</loc>
-  <lastmod>2020-01-16T16:08:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/listings/</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
+ </url>
+ <url>
+  <loc>http://jmbarrios.github.io/pages/</loc>
+  <lastmod>2020-01-19T05:19:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/pages/about/</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
+ </url>
+ <url>
+  <loc>http://jmbarrios.github.io/pages/cursos-y-talleres/</loc>
+  <lastmod>2020-01-19T05:19:00Z</lastmod>
+ </url>
+ <url>
+  <loc>http://jmbarrios.github.io/pages/presentaciones/</loc>
+  <lastmod>2020-01-19T05:15:00Z</lastmod>
+ </url>
+ <url>
+  <loc>http://jmbarrios.github.io/posts/</loc>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/posts/el-algoritmo-metropolis-hastings/</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/posts/generar-un-movimiento-browniano-usando-puentes-brownianos/</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/posts/ggplot-y-funciones-de-distribucion/</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/posts/haciendo-un-mapa-de-conteos-de-datos-del-snib/</loc>
-  <lastmod>2020-01-16T18:14:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/posts/jugando-con-los-registros-del-snib/</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/posts/metodo-de-aceptacion-rechazo/</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
  <url>
   <loc>http://jmbarrios.github.io/posts/metodo-monte-carlo/</loc>
-  <lastmod>2020-01-16T16:09:00Z</lastmod>
+  <lastmod>2020-01-17T16:54:00Z</lastmod>
  </url>
 </urlset>

@@ -1,0 +1,5 @@
+.body-content {
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 100%; /* or 950px */
+}
