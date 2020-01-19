@@ -17,7 +17,7 @@ import time
 
 # Data about this site
 BLOG_AUTHOR = "Juan M Barrios"  # (translatable)
-BLOG_TITLE = "Juan M Barrios Personal Site"  # (translatable)
+BLOG_TITLE = "Juan M Barrios Home"  # (translatable)
 # This is the main URL for your site. It will be used
 # in a prominent link. Don't forget the protocol (http/https)!
 SITE_URL = "http://jmbarrios.github.io/"
@@ -138,15 +138,13 @@ TRANSLATIONS_PATTERN = '{path}.{lang}.{ext}'
 
 NAVIGATION_LINKS = {
     DEFAULT_LANG: (
+        ("/posts/", "Blog"),
         ("/archive.html", "Archivo"),
         ("/categories/", "Etiquetas"),
+        # ("/pages/presentaciones/", "Presentaciones"),
+        ("/pages/cursos-y-talleres/", "Cursos"),
+        ("/about/", "Acerca de mi"),
         ("/rss.xml", "RSS"),
-    ),
-
-    "en": (
-        ("/en/archive.html", "Archive"),
-        ("/en/categories/", "Tags"),
-        ("/en/rss.xml", "feed"),
     ),
 }
 
@@ -233,7 +231,7 @@ PAGES = (
     ("pages/*.rst", "pages", "page.tmpl"),
     ("pages/*.md", "pages", "page.tmpl"),
     ("pages/*.txt", "pages", "page.tmpl"),
-    ("pages/*.html", "pages", "page.tmpl"),
+    ("main_pages/*.html", "", "main_page.tmpl"),
 )
 
 
@@ -548,7 +546,7 @@ HIDDEN_AUTHORS = ['Guest']
 # Final location for the main blog page and sibling paginated pages is
 # output / TRANSLATION[lang] / INDEX_PATH / index-*.html
 # (translatable)
-# INDEX_PATH = ""
+INDEX_PATH = "posts"
 
 # Optional HTML that displayed on “main” blog index.html files.
 # May be used for a greeting. (translatable)

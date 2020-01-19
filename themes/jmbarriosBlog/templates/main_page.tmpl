@@ -1,0 +1,23 @@
+<%inherit file="base.tmpl"/>
+
+<%block name="extra_head">
+  <!-- Estilos para frontpages -->
+  <link href="/assets/css/frontpages.css" rel="stylesheet" type="text/css">
+
+  <!-- Feather icons -->
+  %if use_cdn:
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  %else:
+    <script src="/assets/js/feather.js"></script>
+  %endif
+</%block>
+
+<%block name="content">
+ ${post.text()}
+</%block>
+
+<%block name="extra_js">
+  <script>
+    feather.replace()
+  </script>
+</%block>
